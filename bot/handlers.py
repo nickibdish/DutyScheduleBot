@@ -4,6 +4,10 @@ import calendar
 from datetime import datetime
 
 
+from schedule import ScheduleManager
+from config import schedule_manager
+
+
 
 def register_handlers(bot):
     @bot.message_handler(commands=['schedule'])
@@ -26,3 +30,13 @@ def register_handlers(bot):
 
 
         bot.send_message(message.chat.id,"choise date:", reply_markup=markup)
+
+
+    @bot.callback_query_handler(func=lambda call: call.data.startswith("day_"))
+    def handle_day_callback(call):
+        day = call.data.split("_")[1]
+
+        schedule = schedule_manager.get_day_schedule(int(day))
+        
+        print(schedule)
+

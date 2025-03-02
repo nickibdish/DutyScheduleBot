@@ -1,3 +1,4 @@
 /venv
 .env
 /excel_parser/data
+/__pycache__
