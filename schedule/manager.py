@@ -1,5 +1,5 @@
 # Импортируем функцию parse_schedule из вашего модуля парсера Excel.
-from excel_parser import parse_schedule
+from excel_parser import parse_schedule_from_directory
 
 class ScheduleManager:
     # Допустимые коды смен.
@@ -19,7 +19,7 @@ class ScheduleManager:
         
         :param file_path: строка с путем к Excel-файлу.
         """
-        employees, schedules = parse_schedule(file_path)
+        employees, schedules = parse_schedule_from_directory(file_path)
         if not employees or not schedules:
             raise ValueError("Не удалось получить расписание из файла!")
         

@@ -1,3 +1,7 @@
+import os
+import re
+from datetime import datetime
+from typing import Tuple
 import pandas as pd
 import math
 
@@ -93,4 +97,52 @@ def parse_schedule(file_path: str):
             break
 
     return employees, schedules
+
+# Функция для извлечения месяца и года из имени файла.
+def extract_period_from_filename(filename: str) -> Tuple[int, int]:
+    """
+    Извлекает месяц и год из имени файла.
+    Ожидаемый формат: "[месяц]... [год].xlsx", например "02...2025.xlsx"
+    
+    :param filename: имя файла
+    :return: кортеж (месяц, год) как целые числа
+    :raises ValueError: если формат имени не соответствует ожидаемому
+    """
+    pattern = r"(\d{1,2}).*?(\d{4})"
+    match = re.search(pattern, filename)
+    if match:
+        month = int(match.group(1))
+        year = int(match.group(2))
+        return month, year
+    else:
+        raise ValueError("Имя файла не соответствует ожидаемому формату.")
+
+def parse_schedule_from_directory(directory: str):
+    """
+    Ищет в указанном каталоге Excel-файл с расписанием, имя которого соответствует
+    формату "[месяц]... [год].xlsx", где месяц и год совпадают с текущими.
+    
+    Если такой файл найден, формируется полный путь и вызывается parse_schedule.
+    Если файл не найден, возвращаются (None, None).
+    
+    :param directory: путь к каталогу, в котором ищем файл.
+    :return: кортеж (employees, schedules) из parse_schedule, или (None, None)
+    """
+    now = datetime.now()
+    current_month = now.month
+    current_year = now.year
+    
+    # Проходим по всем файлам в каталоге
+    for file in os.listdir(directory):
+        if file.lower().endswith('.xlsx'):
+            try:
+                month, year = extract_period_from_filename(file)
+            except ValueError:
+                continue  # если формат не соответствует, пропускаем файл
+            if month == current_month and year == current_year:
+                full_path = os.path.join(directory, file)
+                return parse_schedule(full_path)
+    
+    print("Не найден файл, соответствующий текущему месяцу и году.")
+    return None, None
 
