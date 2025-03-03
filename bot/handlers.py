@@ -2,6 +2,7 @@ import telebot
 from telebot import types
 import calendar
 from datetime import datetime
+import time
 
 
 from schedule import ScheduleManager
@@ -37,6 +38,21 @@ def register_handlers(bot):
         day = call.data.split("_")[1]
 
         schedule = schedule_manager.get_day_schedule(int(day))
+
+        employees = []
+
+
+        for employee, shift in schedule.items():
+            if shift == "Д":
+                employees.append(employee)
         
-        print(schedule)
+        result = "employe:\n" + "\n".join(employees)
+
+        bot.send_message(call.message.chat.id, result)
+
+        time.sleep(1)
+
+        bot.delete_message(call.message.chat.id, call.message.message_id)
+
+
 
