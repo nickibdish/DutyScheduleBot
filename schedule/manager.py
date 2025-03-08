@@ -20,8 +20,8 @@ class ScheduleManager:
         :param file_path: строка с путем к Excel-файлу.
         """
         employees, schedules = parse_schedule_from_directory(file_path)
-        if not employees or not schedules:
-            raise ValueError("Не удалось получить расписание из файла!")
+        # if not employees or not schedules:
+        #     raise ValueError("Не удалось получить расписание из файла!")
         
         self.employees = employees
         self.schedules = schedules

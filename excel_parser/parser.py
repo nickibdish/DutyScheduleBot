@@ -142,7 +142,8 @@ def parse_schedule_from_directory(directory: str):
             if month == current_month and year == current_year:
                 full_path = os.path.join(directory, file)
                 return parse_schedule(full_path)
-    
-    print("Не найден файл, соответствующий текущему месяцу и году.")
+            
+    print("Не найден файл, соответствующий текущему месяцу и году!")
     return None, None
+
 
